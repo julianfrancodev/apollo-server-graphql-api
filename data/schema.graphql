@@ -1,0 +1,125 @@
+type Client {
+    id:ID,
+    name:String,
+    lastname:String,
+    company:String,
+    emails:[Email],
+    age:Int,
+    type:TypeClient,
+    orders:[Order]
+}
+
+type Email {
+    email:String
+}
+
+input EmailInput{
+    email:String
+}
+
+input ClientInput{
+    id:ID,
+    name:String!,
+    lastname:String!,
+    company:String!,
+    emails:[EmailInput],
+    age:Int,
+    type:TypeClient,
+    orders:[OrderInput],
+    seller: ID
+}
+
+enum TypeClient {
+    BASIC,
+    PREMIUM
+}
+
+type ClientTotal {
+    total:Float,
+    client:[Client]
+}
+
+
+type Order {
+    id:ID,
+    order:[OrderProduct],
+    total:Int,
+    date:String,
+    client:ID,
+    state:TypeState
+}
+
+type OrderProduct{
+    id:ID,
+    quantity:Int
+}
+
+input OrderInput {
+    id:ID,
+    order:[OrderProductInput],
+    total:Int,
+    date:String,
+    client:ID,
+    state:TypeState
+}
+
+enum TypeState {
+    CANCELED,
+    IN PROCESS,
+    PENDING,
+    SUCCESS
+}
+
+input OrderProductInput {
+    id:ID,
+    quantity:Int
+}
+
+type Product{
+    id:ID,
+    name:String,
+    price:Int,
+    stock:Int
+}
+
+input ProductInput{
+    id:ID,
+    name:String,
+    price:Int,
+    stock:Int
+}
+type Token{
+    token:String!
+}
+
+type User{
+    username:String,
+    id:ID,
+    nameUser:String,
+    rol:String
+}
+
+type Query {
+    getClients(limit:Int,seller:String) : [Client]
+    getClient(id: ID): Client
+    getProducts(limit:Int) : [Product]
+    getProduct(id:ID) : Product
+    getOrders(client:String):[Order]
+    getOrder(id:ID):Order
+    topClients:[ClientTotal]
+    getUser:User
+}
+
+type Mutation {
+    createClient(input: ClientInput):Client
+    updateClient (input: ClientInput): Client
+    deleteClient (id: ID): String
+    createProduct(input:ProductInput):Product
+    updateProduct (input:ProductInput):Product
+    deleteProduct (id:ID):String
+    createOrder(input:OrderInput):Order
+    updateOrder(input:OrderInput):Order
+    createUser(username:String!,password:String!,nameUser:String!,rol:String!):String
+    authUser(username:String!,password:String!):Token
+
+}
